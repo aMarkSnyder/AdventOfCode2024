@@ -16,8 +16,10 @@ class ClawMachine:
     py: int
 
     def solve(self):
-        # ax * a + bx * b == px
-        # ay * a + by * b == py
+        # ax * a + bx * b == px -> a == (px - bx*b) / ax
+        # ay * a + by * b == py -> ay/ax * (px - bx*b) + by*b == py -> ay/ax * px - ay/ax * bx * b + by * b == py
+        # -> b * (by - ay/ax * bx) == py - ay/ax * px -> b == (py - ay/ax * px) / (by - ay/ax * bx)
+
         coeffs = np.array([[self.ax, self.bx], [self.ay, self.by]])
         ords = np.array([self.px, self.py])
 

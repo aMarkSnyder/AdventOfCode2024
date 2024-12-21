@@ -1,26 +1,30 @@
 from argparse import ArgumentParser
+from functools import cache
 
-def valid_design(design, options, curr):
-    if design == curr:
+@cache
+def valid_design(remaining, options):
+    if remaining == '':
         return True
-    if len(design) < len(curr):
-        return False
     candidates = []
     for option in options:
-        test = curr + option
-        if test == design[:len(test)]:
-            candidates.append(test)
-    return any(valid_design(design, options, candidate) for candidate in candidates)
+        if option == remaining[:len(option)]:
+            candidates.append(remaining[len(option):])
+    return sum(valid_design(candidate, options) for candidate in candidates)
 
 def main(data):
-    options = data[0].split(', ')
+    options = tuple(data[0].split(', '))
     designs = data[2:]
 
     total_valid = 0
+    total_count = 0
     for design in designs:
-        if valid_design(design, options, ''):
+        count = valid_design(design, options)
+        if count:
             total_valid += 1
+            total_count += count
+
     print(total_valid)
+    print(total_count)
 
 def read_input(input_file):
     data = []
